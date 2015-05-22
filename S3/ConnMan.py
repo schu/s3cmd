@@ -76,7 +76,7 @@ class http_connection(object):
         san = cert.get('subjectAltName', ())
         for key, value in san:
             if key == 'DNS':
-                if value.startswith('*.s3') and value.endswith('.amazonaws.com') and self.c.host.endswith('.amazonaws.com'):
+                if value.startswith('*.sos') and value.endswith('.exo.io') and self.c.host.endswith('.exo.io'):
                     return
         raise e
 
@@ -96,7 +96,8 @@ class http_connection(object):
         try:
             context = http_connection._ssl_context()
             # S3's wildcart certificate doesn't work with DNS-style named buckets.
-            if hostname.endswith('.amazonaws.com') and context:
+            if (hostname.endswith('.amazonaws.com') or
+                    hostname.endswith('.sos.exo.io')) and context:
                 # this merely delays running the hostname check until
                 # after the connection is made and we get control
                 # back.  We then run the same check, relaxed for S3's
